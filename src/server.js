@@ -9,7 +9,8 @@ const routes=require("./routes.js");
 // Seta uma configuração em todo o arquivo. Muito similar ao use() que seta um codigo para todo o arquivo
 server.set("view engine", 'ejs');
 
-//Com isso, todo o arquivo vai pode usar esses arquivos(os publicos), apartir de rotas
+//Com isso, todo as rotas vai pode usar esses arquivos(os publicos), apartir de rotas
+// Use é uma função que é para executar em todas as rotas alguma coisa(middlware)
 server.use(express.static("public"));
 
 //urlencoded é um middlware(como tudo que é usado no use) que ativa parametros de url, como por ex: Ativa o requisição do body
