@@ -1,0 +1,1 @@
+//setar coisas para iniciar.Obs: só inicia uma vez
