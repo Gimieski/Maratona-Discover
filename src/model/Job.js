@@ -1,31 +1,57 @@
-let data=[
-    {
-       id:1, 
-       name:"Pizzaria Guloso",
-       'daily-hours':2, 
-       'total-hours': 10,
-       createdAt:Date.now()
-     },
-     {
-       id:2, 
-       name:"OneTwo Project",
-       'daily-hours':3, 
-       'total-hours': 47,
-       createdAt:Date.now()
-     }
- ]
+const Database=require('../db/config')
 
  module.exports={
-    get(){
-        return data
+    async get(){
+        const db=await Database();
+
+        const jobs=await db.all(`SELECT * FROM jobs`);
+
+        await db.close()
+
+        //Usamos o map, pois recebemos um array. E com isso vamos executar para cada item
+        return jobs.map(job=>({
+                id:job.id,
+                name:job.name,
+                "daily-hours":job.daily_hours,
+                "total-hours":job.total_hours,
+                createdAt:job.createdAt
+                // return anonimo
+            }
+        ))
     },
-    update(newJob){
-        data=newJob;
+    async update(UpdatedJob,jobId){
+        const db=await Database();
+
+        await db.run(`UPDATE jobs SET 
+        name="${UpdatedJob.name}",
+        daily_hours=${UpdatedJob["daily-hours"]},
+        total_hours=${UpdatedJob["total-hours"]}
+        WHERE id = ${jobId}
+        `)
+
+        await db.close()
     },
-    delete(id){
-        data=data.filter(job=>Number(job.id)!==Number(id))
+    async delete(id){
+       const db=await Database()
+    
+       await db.run(`DELETE FROM jobs WHERE id = ${id}`)
     },
-    save(newJob){
-        data.push(newJob)
+    async save(newJob){
+        const db= await Database();
+
+        await db.run(`INSERT INTO jobs (
+            name,
+            daily_hours,
+            total_hours,
+            createdAt
+        ) VALUES (
+            "${newJob.name}",
+            ${newJob["daily-hours"]},
+            ${newJob["total-hours"]},
+            ${newJob.createdAt}
+        )`);
+
+        await db.close()
+        
     }
  }

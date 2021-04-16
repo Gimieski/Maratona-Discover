@@ -1,11 +1,11 @@
 const Profile=require('../model/Profile')
 
 module.exports={
-    index(req,res){
-       return res.render("profile",{profile:Profile.get()});
+    async index(req,res){
+       return res.render("profile",{profile:await Profile.get()});
        // ele renderiza os dados do profile, por issoq aundo colocamos no index, ele consegue adapta
     },
-    update(req,res){
+    async update(req,res){
        // req.body: pega quantas semans quero de ferias
        const data=req.body;
        // definir quantas semnas por ano
@@ -21,8 +21,10 @@ module.exports={
        // 40 horas por mes / 3000 mil reais que quero ganhar, então é 75 horas por mes
        const valueHour=data["monthly-budget"]/monthlyTotalHours
        
-       Profile.update({
-            ...Profile.get(),
+       const profile=await Profile.get()
+
+       await Profile.update({
+            ...profile,
          ...req.body,
          "value-hour":valueHour
        })

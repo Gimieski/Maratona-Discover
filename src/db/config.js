@@ -3,14 +3,16 @@ const sqlite3=require('sqlite3')
 const { open }=require('sqlite')
 //Com as chaves, podemos ir la dentro do pacote e pegar algo em especifico
 
-module.exports=()=>{
+module.exports=()=>
     open({
     filename:'./database.sqlite',
     driver:sqlite3.Database
-});
-}
-/* open é a função que vai abrir a conexão.Mas nos precisamos exportar para o servidor né, então usamos module exports.
+    });
+
+/* open é a função do banco de dados sqlite que vai abrir a conexão.Mas nos precisamos exportar para o servidor né, então usamos module exports.
 Porem, o opne só aceita ser envolvido por uma função, então usamos arrow function
+
+obs: sqlite3 é o drive
 */
 // filename, ou seja, qual o arquivo do banco de dados?
 // drive, ou seja qual serviço de banco de dados?

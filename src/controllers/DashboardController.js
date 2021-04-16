@@ -3,9 +3,10 @@ const Profile=require("../model/Profile");
 const Jobutils=require("../utils/jobUtils");
 
 module.exports={
-    index(req,res){
-      const jobs=Job.get()
-      const profiles=Profile.get()
+    async index(req,res){
+      const jobs=await Job.get()
+
+      const profiles= await Profile.get()
       //Vamos fazer os calculos aqui, pois sempre que atualizarmos a pagina podemos mostrar um calculo novo quando editado
       
       let statusCount={
@@ -18,8 +19,10 @@ module.exports={
       let jobTotalHours=0;
 
       const updatedJobs=jobs.map((job)=>{
+        
       //pega o valor do formulario de total de horas, dividido pelas horas por dia. Usaremos isso para somar pela data do projeto
             const remaining=Jobutils.remainingDays(job) 
+            
             const status=remaining<=0 ? 'done' : 'progress'
 
             // statusCount[done] tem porpriedade DONE
@@ -44,7 +47,7 @@ module.exports={
         // com isso, vamos subtrair esses valores(menos os encerrados)
         
         const freeHours=profiles['hours-per-day'] - jobTotalHours
-         
+      
         res.render("index",{jobs:updatedJobs,profile:profiles, statusCount:statusCount, freeHours:freeHours});
     }
 }
